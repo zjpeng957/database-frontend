@@ -1,11 +1,11 @@
 <template>
     <div class="KPIInfo">
-        <el-select v-model="value" placeholder="请选择">
+        <el-select v-model="name" placeholder="请选择">
             <el-option
             v-for="item in netUnitList"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
+            :key="item"
+            :label="item"
+            :value="item">
             </el-option>
         </el-select>
         <el-button @click="search">确定</el-button>
@@ -30,14 +30,14 @@
             </div>
         </el-row>
         <br>
-        <div class="charts">
-            <div id="rpcChart" :style="{width: '600px',height:'400px'}"></div>
-        </div>
+         <div id="rpcChart" :style="{width: '600px',height:'400px'}" v-if="rateList!=''"></div>
     </div>
 </template>
 
 <script>
-import echarts from 'echarts'
+//import echarts from 'echarts'
+var echarts=require('echarts');
+import axios from 'axios'
 
 export default {
     data(){
@@ -46,36 +46,75 @@ export default {
             beginTime:'',
             endTime:'',
             netUnitList:'',
-            rateList:'',
-            dateList:''
+            rateList:[1,2,3,4,5],
+            dateList:'',
+            name:'',
         }
     },
     methods:{
         search:function(){
-            //发送查找请求
+            axios.post('http://localhost:8000/kpiinfo/',{
+                name:this.name,
+                beginTime:this.beginTime,
+                endTime:this.endTime,
+            })
+            .then(response=>{
+                this.dateList=response.data.dateList;
+                this.rateList=response.data.rateList;
+                var option = {
+                    title: {
+                        text: 'RPC连接重建比率变化'
+                    },
+                    tooltip: {},
+                    legend: {
+                        data:['%']
+                    },
+                    xAxis: {
+                        data:this.dateList,
+                    },
+                    yAxis: {},
+                    series: [{
+                        name: '',
+                        type: 'bar',
+                        data: this.rateList,
+                    }]
+                };
+                var rpcChart = echarts.init(document.getElementById('rpcChart'));
+                rpcChart.setOption(option);
+            })
         }
     },
+    created:function(){
+        
+        axios.get('http://localhost:8000/kpiinfo/')
+        .then(response=>{
+            this.netUnitList=response.data.netUnitList;
+        })
+    },
     mounted(){
-        let rpcChart = this.$echarts.init(document.getElementById('rpcChart'))
+        //let rpcChart = echarts.init(document.getElementById('rpcChart'));
+        /*
         var option = {
-            title: {
-                text: 'RPC连接重建比率变化'
-            },
-            tooltip: {},
-            legend: {
-                data:['%']
-            },
-            xAxis: {
-                data:dateList,
-            },
-            yAxis: {},
-            series: [{
-                name: '',
-                type: 'bar',
-                data: rateList,
-            }]
-        };
-        rpcChart.setOption(option)
+                    title: {
+                        text: 'RPC连接重建比率变化'
+                    },
+                    tooltip: {},
+                    legend: {
+                        data:['%']
+                    },
+                    xAxis: {
+                        data:this.dateList,
+                    },
+                    yAxis: {},
+                    series: [{
+                        name: '',
+                        type: 'bar',
+                        data: this.rateList,
+                    }]
+                };
+                var rpcChart = echarts.init(document.getElementById('rpcChart'));
+                rpcChart.setOption(option);
+            */
     }
 }
 </script>

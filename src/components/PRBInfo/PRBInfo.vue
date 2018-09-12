@@ -1,14 +1,14 @@
 <template>
     <div class="PRBInfo">
-        <el-select v-model="value" placeholder="请选择">
+        <el-select v-model="name" placeholder="请选择">
             <el-option
             v-for="item in netUnitName"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
+            :key="item"
+            :label="item"
+            :value="item">
             </el-option>
         </el-select>
-        <el-select v-model="value" placeholder="请选择">
+        <el-select v-model="attr" placeholder="请选择">
             <el-option
             v-for="item in attributes"
             :key="item"
@@ -52,25 +52,75 @@
             }">
         </el-time-select>
         <el-button v-on:click="select">确定</el-button>
+        <div id="prbChart" :style="{width: '600px',height:'400px'}" v-if="dataList!=''"></div>
     </div>
 </template>
 
 <script>
+import axios from 'axios'
+import xlsx from 'xlsx'
+var echarts=require('echarts');
+
 export default {
     data(){
         return{
             attributes:[1,2,3,4,5,6,7,8,9,10],
+            attr:'',
+            name:'',
             startTime:'',
             endTime:'',
             startDay:'',
-            endDay:''
+            endDay:'',
+            netUnitName:'',
+            dataList:'',
+            timeList:'',
         }
     },
-    props:['netUnitName'],
     methods:{
         select(){
             //查找请求
+            axios.post('http://localhost:8000/prbinfo/',{
+                name:this.name,
+                attr:this.attr,
+                startDay:this.startDay,
+                startTime:this.startTime,
+                endDay:this.endDay,
+                endTime:this.endTime,
+            })
+            .then(response=>{
+                this.dataList=response.data.dataList;
+                this.timeList=response.data.timeList;
+                var option = {
+                    title: {
+                        text: 'PRB变化'
+                    },
+                    tooltip: {},
+                    legend: {
+                        data:['%']
+                    },
+                    xAxis: {
+                        data:this.timeList,
+                    },
+                    yAxis: {},
+                    series: [{
+                        name: '',
+                        type: 'bar',
+                        data: this.dataList,
+                    }]
+                };
+                var prbChart = this.$echarts.init(document.getElementById('prbChart'))
+                prbChart.setOption(option)
+            })
         }
+    },
+    created:function(){
+        axios.get('http://localhost:8000/prbinfo/')
+        .then(response=>{
+            this.netUnitName=response.data.netUnitName
+        })
+    },
+    mounted(){
+        
     }
 }
 </script>

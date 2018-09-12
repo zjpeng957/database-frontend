@@ -15,7 +15,8 @@
         <el-upload
             class="upload-demo"
             drag
-            action="https://jsonplaceholder.typicode.com/posts/"
+            action="http://localhost:8000/import/"
+            data="qwertyui"
             multiple>
             <i class="el-icon-upload"></i>
             <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
@@ -30,19 +31,19 @@ export default {
         return{
             options:[
             {
-                value:'选项1',
+                value:'1',
                 label:'tbCell'
             },
             {
-                value:'选项2',
+                value:'2',
                 label:'tbKPI'
             },
             {
-                value:'选项3',
+                value:'3',
                 label:'tbPRB'
             },
             {
-                value:'选项4',
+                value:'4',
                 label:'tbMROData'
             }
         ],

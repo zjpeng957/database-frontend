@@ -8,9 +8,12 @@
     "build": "rimraf dist && webpack -p --progress --hide-modules"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "echarts": "^4.1.0",
     "element-ui": "^2.3.4",
-    "vue": "^2.5.16"
+    "vue": "^2.5.16",
+    "vue-router": "^3.0.1",
+    "xlsx": "^0.14.0"
   },
   "engines": {
     "node": ">=6"

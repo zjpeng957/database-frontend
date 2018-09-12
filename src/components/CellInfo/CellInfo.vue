@@ -1,12 +1,19 @@
 <template>
     <div class="CellInfo">
-        <el-input placeholder="请输入内容" v-model="searchKey" class="input-with-select">
-            <el-select v-model="select" slot="prepend" placeholder="请选择">
+        <span>查找方式</span>
+        <el-select v-model="searchType" slot="prepend" placeholder="请选择">
             <el-option label="CellID" value="1"></el-option>
             <el-option label="CellName" value="2"></el-option>
-            </el-select>
-            <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
-        </el-input>
+        </el-select>
+        <el-select v-model="searchKey" filterable placeholder="请选择">
+            <el-option
+            v-for="item in options"
+            :key="item"
+            :label="item"
+            :value="item">
+            </el-option>
+        </el-select>
+        <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
         <br>
         <el-table
             :data="tableData"
@@ -28,6 +35,7 @@
             </el-table-column>
         </el-table>
         <el-button>另存为</el-button>
+        <p>{{info}}</p>
     </div>
 </template>
 <style>
@@ -39,18 +47,51 @@
   }
 </style>
 <script>
+import axios from 'axios'
+//Vue.prototype.$http = axios
+
 export default {
     data(){
         return{
+            searchType:'',
             searchKey:'',
-            select:''
+            idOptions:'',
+            nameOptions:'',
+            tableData:[],
+            info:''
         }
     },
-    props:['tableData'],
+    //props:['tableData'],
+    computed:{
+        options:function(){
+            if(this.searchType=='1') return this.idOptions
+            else return this.nameOptions
+        }
+    },
     methods:{
         search:function(){
             
+            axios.post('/cellinfo/',{
+                type:this.searchType,
+                key:this.searchKey,
+            })
+            .then(response=>{
+                this.info=response.data.tableData;
+                this.tableData=response.data.tableData;
+            })
+            .catch(error=>{
+                console.log(error)
+            })
         }
+    },
+    
+    created:function(){
+        axios.get('/cellinfo/')
+        .then(response=>{
+            //this.info=response.data.idOptions;
+            this.idOptions=response.data.idOptions;
+            this.nameOptions=response.data.nameOptions;
+        })
     }
 }
 </script>

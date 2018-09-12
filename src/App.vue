@@ -8,6 +8,7 @@
           <el-col :span="24"><div class="grid-content bg-purple-dark"></div></el-col>
         </el-row>
         <component v-bind:is="selectedComponent"></component>
+        
       </el-main>
     </el-container>
   </div>
@@ -21,6 +22,7 @@ import CellInfo from './components/CellInfo/CellInfo.vue'
 import NodeBInfo from './components/NodeBInfo/NodeBInfo.vue'
 import KPIInfo from './components/KPIInfo/KPIInfo.vue'
 import PRBInfo from './components/PRBInfo/PRBInfo.vue'
+import C2I from './components/C2I/C2I.vue'
 
 export default {
   data(){
@@ -40,20 +42,14 @@ export default {
       })
     },
     changeIndex: function(curIndex){
-      switch(curIndex){
-        case "1-1": selectedComponent='CellInfo';
-                    break;
-        case "1-2": selectedComponent='NodeBInfo';
-                    break;
-        case "1-3": selectedComponent='KPIInfo';
-                    break;
-        case "1-5": selectedComponent='PRBInfo';
-                    break;
-        case "2-1": selectedComponent='ImportUnit';
-                    break;
-        case "2-2": selectedComponent='ExportUnit';
-                    break;
-      }
+      if(curIndex=="1-1") this.selectedComponent='CellInfo'
+      else if(curIndex=="1-2") this.selectedComponent='NodeBInfo'
+      else if(curIndex=="1-3") this.selectedComponent='KPIInfo'
+      else if(curIndex=="1-4") this.selectedComponent='PRBInfo'
+      else if(curIndex=="2-1") this.selectedComponent='ImportUnit'
+      else if(curIndex=="2-2") this.selectedComponent='ExportUnit'
+      else if(curIndex=="3") this.selectedComponent='C2I'
+
       this.selectedIndex = curIndex
     }
   },
@@ -64,7 +60,8 @@ export default {
     CellInfo,
     NodeBInfo,
     KPIInfo,
-    PRBInfo
+    PRBInfo,
+    C2I,
   }
 }
 </script>
