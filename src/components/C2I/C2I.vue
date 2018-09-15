@@ -4,24 +4,24 @@
         </el-input>
         <span class="demonstration">%</span>
         <el-button @click="search">确定</el-button>
-        <div class='result' v-if="tableData!=''">
+        <div id="c2i" class='result'>
             <el-table
-                v-if="tableData!=''"
                 :data="tableData"
                 style="width: 100%">
                 <el-table-column
-                    prop="AId"
+                    prop="a"
                     label="小区A"
                     width="180">
                 </el-table-column>
                 <el-table-column
-                    prop="BId"
+                    prop="b"
                     label="小区B"
                     width="180">
                 </el-table-column>
                 <el-table-column
-                    prop="CId"
-                    label="小区C">
+                    prop="c"
+                    label="小区C"
+                    width="180">
                 </el-table-column>
             </el-table>
             <div class="block" v-if="length>50" @current-change="currentChange" @prev-click="prevClick" @next-click="nextClick">
@@ -30,6 +30,7 @@
                     :total="lenth/50+1">
                 </el-pagination>
             </div>
+            <save-table pid="c2i" v-if="tableData!=''"></save-table>
         </div>
     </div>
     
@@ -37,24 +38,25 @@
 
 <script>
 import axios from 'axios'
+import saveTable from './../saveTable/saveTable.vue'
 
 export default {
     data(){
         return{
             x:'',
-            tableData:'',
+            tableData:[],
             allData:'',
             length:0
         }
     },
     methods:{
         search(){
-            axios.post('/c2iinfo/',{
-                x:this.x
+            axios.post('http://10.206.12.148:8000/c2iinfo/',{
+                key:this.x
             })
             .then(response=>{
-                this.allData=response.data.allData
-                this.length=this.allData.length
+                this.tableData=response.data.data
+                //this.length=this.allData.length
             })
         },
         currentChange(curPage){
@@ -66,6 +68,9 @@ export default {
         nextClick(){
             
         }
+    },
+    components:{
+        saveTable
     }
 }
 </script>

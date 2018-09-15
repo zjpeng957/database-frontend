@@ -16,26 +16,106 @@
         <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
         <br>
         <el-table
+            id="cell"
             :data="tableData"
             style="width: 100%">
             <el-table-column
-                prop="cell_id"
-                label="Cell_ID"
+                prop="CITY"
+                label="CITY"
                 width="100">
             </el-table-column>
             <el-table-column
-                prop="name"
-                label="CellName"
+                prop="SECTOR_ID"
+                label="SECTOR_ID"
                 width="100">
             </el-table-column>
             <el-table-column
-                prop="city"
-                label="City"
+                prop="ENODEBID"
+                label="ENODEBID"
+                width="100">
+            </el-table-column>
+            <el-table-column
+                prop="SECTOR_NAME"
+                label="SECTOR_NAME"
+                width="100">
+            </el-table-column>
+            <el-table-column
+                prop="EARFCN"
+                label="EARFCN"
+                width="100">
+            </el-table-column>
+            <el-table-column
+                prop="PCI"
+                label="PCI"
+                width="100">
+            </el-table-column>
+            <el-table-column
+                prop="ENODEB_NAME"
+                label="ENODEB_NAME"
+                width="100">
+            </el-table-column>
+            <el-table-column
+                prop="PSS"
+                label="PSS"
+                width="100">
+            </el-table-column>
+            <el-table-column
+                prop="SSS"
+                label="SSS"
+                width="100">
+            </el-table-column>
+            <el-table-column
+                prop="TAC"
+                label="TAC"
+                width="100">
+            </el-table-column>
+            <el-table-column
+                prop="VENDOR"
+                label="VENDOR"
+                width="100">
+            </el-table-column>
+            <el-table-column
+                prop="LONGITUDE"
+                label="LONGITUDE"
+                width="100">
+            </el-table-column>
+            <el-table-column
+                prop="LATITUDE"
+                label="LATITUDE"
+                width="100">
+            </el-table-column>
+            <el-table-column
+                prop="STYLE"
+                label="STYLE"
+                width="100">
+            </el-table-column>
+            <el-table-column
+                prop="AZIMUTH"
+                label="AZIMUTH"
+                width="100">
+            </el-table-column>
+            <el-table-column
+                prop="HEIGHT"
+                label="HEIGHT"
+                width="100">
+            </el-table-column>
+            <el-table-column
+                prop="ELECTTILT"
+                label="ELECTTILT"
+                width="100">
+            </el-table-column>
+            <el-table-column
+                prop="MECHTILT"
+                label="MECHTILT"
+                width="100">
+            </el-table-column>
+            <el-table-column
+                prop="TOTLETILT"
+                label="TOTLETILT"
                 width="100">
             </el-table-column>
         </el-table>
-        <el-button>另存为</el-button>
-        <p>{{info}}</p>
+        <save-table pid="cell" v-if="tableData!=''"></save-table>
     </div>
 </template>
 <style>
@@ -48,6 +128,7 @@
 </style>
 <script>
 import axios from 'axios'
+import saveTable from './../saveTable/saveTable.vue'
 //Vue.prototype.$http = axios
 
 export default {
@@ -68,30 +149,33 @@ export default {
             else return this.nameOptions
         }
     },
-    methods:{
+    methods:{           
         search:function(){
             
-            axios.post('/cellinfo/',{
-                type:this.searchType,
-                key:this.searchKey,
+            axios.post('http://10.206.12.148:8000/cellinfo/',{
+                //type:this.searchType,x
+                searchkey:this.searchKey,
             })
             .then(response=>{
-                this.info=response.data.tableData;
+                this.info=response;
                 this.tableData=response.data.tableData;
             })
             .catch(error=>{
                 console.log(error)
             })
-        }
+        },
     },
     
     created:function(){
-        axios.get('/cellinfo/')
+        axios.get('http://10.206.12.148:8000/cellinfo/')
         .then(response=>{
-            //this.info=response.data.idOptions;
-            this.idOptions=response.data.idOptions;
-            this.nameOptions=response.data.nameOptions;
+            this.info=response.data.idOptions;
+            this.idOptions=response.data.ID;
+            this.nameOptions=response.data.name;
         })
+    },
+    components:{
+        saveTable
     }
 }
 </script>

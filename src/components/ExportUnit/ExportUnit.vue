@@ -11,36 +11,68 @@
                 </el-option>
             </el-select>
         </div>
-        <br>
         <el-button @click="ExportData">导出</el-button>
+        <p>{{info}}</p>
+        <el-dialog
+            title="另存为"
+            :visible.sync="dialogVisible"
+            width="30%"
+            :before-close="handleClose"
+            >
+            <a v-bind:href="url" download="a.txt">a.xlsx右键另存为(点击保存到默认路径)</a>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
 <script>
+import xlsx from 'xlsx'
+import axios from 'axios'
+
 export default {
     data(){
         return{
             options:[
             {
-                value:'选项1',
-                label:'tbCell'
+                value:'1',
+                label:'cell'
             },
             {
-                value:'选项2',
-                label:'tbAdjCell'
+                value:'2',
+                label:'eNodeB'
             },
             {
-                value:'选项3',
-                label:'tbSecAdjCell'
+                value:'3',
+                label:'PRBNew'
             },
         ],
-        value:''
+        value:'',
+        url:'',
+        dialogVisible:false,
+        info:'',
         }
     },
     methods:{
-        ExportData:function(){
-            console.log("succeed!")
-        }
+        ExportData(){
+            axios.post('http://10.206.12.148:8000/download/',{
+                table:this.value,
+            })
+            .then(response=>{
+                this.info=response;
+                //let Blob=new Blob([response.data],{type:""});
+                this.url=window.URL.createObjectURL(new Blob([response.data],{type:""}))
+                this.dialogVisible = true
+            })
+        },
+        handleClose(done) {
+        this.$confirm('确认关闭？')
+          .then(_ => {
+            done();
+          })
+          .catch(_ => {});
+      }
     }
 }
 </script>

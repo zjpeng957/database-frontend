@@ -8,6 +8,14 @@
             :value="item">
             </el-option>
         </el-select>
+        <el-select v-model="attr" placeholder="请选择">
+            <el-option
+            v-for="item in attributes"
+            :key="item"
+            :label="item"
+            :value="item">
+            </el-option>
+        </el-select>
         <el-button @click="search">确定</el-button>
         <br>
         <el-row>
@@ -49,12 +57,15 @@ export default {
             rateList:[1,2,3,4,5],
             dateList:'',
             name:'',
+            attr:'',
+            attributes:['RRC连接建立完成次数 (无)','RRC连接请求次数（包括重发） (无)','RRC建立成功率qf (%)','E-RAB建立成功总次数 (无)','E-RAB建立尝试总次数 (无)','E-RAB建立成功率2 (%)','eNodeB触发的E-RAB异常释放总次数 (无)','小区切换出E-RAB异常释放总次数 (无)','E-RAB掉线率(新) (%)','无线接通率ay (%)','eNodeB发起的S1 RESET导致的UE Context释放次数 (无)','UE Context异常释放次数 (无)','UE Context建立成功总次数 (无)','无线掉线率 (%)','eNodeB内异频切换出成功次数 (无)','eNodeB内异频切换出尝试次数 (无)','eNodeB内同频切换出成功次数 (无)','eNodeB内同频切换出尝试次数 (无)','eNodeB间异频切换出成功次数 (无)','eNodeB间异频切换出尝试次数 (无)','eNodeB间同频切换出成功次数 (无)','eNodeB间同频切换出尝试次数 (无)','eNB内切换成功率 (%)','eNB间切换成功率 (%)','同频切换成功率zsp (%)','异频切换成功率zsp (%)','切换成功率 (%)','小区PDCP层所接收到的上行数据的总吞吐量 (比特)','小区PDCP层所发送的下行数据的总吞吐量 (比特)','RRC重建请求次数 (无)','RRC连接重建比率 (%)','通过重建回源小区的eNodeB间同频切换出执行成功次数 (无)','通过重建回源小区的eNodeB间异频切换出执行成功次数 (无)','通过重建回源小区的eNodeB内同频切换出执行成功次数 (无)','通过重建回源小区的eNodeB内异频切换出执行成功次数 (无)','eNB内切换出成功次数 (次)','eNB内切换出请求次数 (次)'],
         }
     },
     methods:{
         search:function(){
-            axios.post('http://localhost:8000/kpiinfo/',{
+            axios.post('http://10.206.12.148:8000/kpiinfo/',{
                 name:this.name,
+                attr:this.attr,
                 beginTime:this.beginTime,
                 endTime:this.endTime,
             })
@@ -77,7 +88,14 @@ export default {
                         name: '',
                         type: 'bar',
                         data: this.rateList,
-                    }]
+                    }],
+                    toolbox:{
+                        show:true,
+                        feature:{
+                            saveAsImage:{
+                            }
+                        }
+                    }
                 };
                 var rpcChart = echarts.init(document.getElementById('rpcChart'));
                 rpcChart.setOption(option);
@@ -86,7 +104,7 @@ export default {
     },
     created:function(){
         
-        axios.get('http://localhost:8000/kpiinfo/')
+        axios.get('http://10.206.12.148:8000/kpiinfo/')
         .then(response=>{
             this.netUnitList=response.data.netUnitList;
         })
