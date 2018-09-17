@@ -51,6 +51,7 @@
             }">
         </el-time-select>
         <el-button v-on:click="select">确定</el-button>
+        <p>{{startDay}}</p>
         <br>
         <div id="chartprb" :style="{width: '600px',height:'400px'}"></div>
     </div>
@@ -81,7 +82,7 @@ export default {
     methods:{
         select(){
             //查找请求
-            axios.post('http://10.206.12.148:8000/prbinfo/',{
+            axios.post('http://127.0.0.1:8000/prbinfo/',{
                 name:this.name,
                 attr:this.attr,
                 startDay:this.startDay,
@@ -127,7 +128,7 @@ export default {
         }
     },
     created:function(){
-        axios.get('http://10.206.12.148:8000/prbinfo/')
+        axios.get('http://127.0.0.1:8000/prbinfo/')
         .then(response=>{
             this.netUnitName=response.data.netUnitList
         })

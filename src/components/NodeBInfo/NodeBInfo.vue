@@ -143,7 +143,7 @@ export default {
     //props:['tableData'],
     methods:{
         search:function(){
-            axios.post('http://10.206.12.148:8000/nodebinfo/',{
+            axios.post('http://127.0.0.1:8000/nodebinfo/',{
                 //type:this.searchType,
                 key:this.searchKey,
             })
@@ -153,7 +153,7 @@ export default {
         }
     },
     created:function(){
-        axios.get('http://10.206.12.148:8000/nodebinfo/')
+        axios.get('http://127.0.0.1:8000/nodebinfo/')
         .then(response=>{
             this.idOptions=response.data.ID;
             this.nameOptions=response.data.name;

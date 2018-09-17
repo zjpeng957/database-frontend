@@ -152,7 +152,7 @@ export default {
     methods:{           
         search:function(){
             
-            axios.post('http://10.206.12.148:8000/cellinfo/',{
+            axios.post('http://127.0.0.1:8000/cellinfo/',{
                 //type:this.searchType,x
                 searchkey:this.searchKey,
             })
@@ -167,7 +167,7 @@ export default {
     },
     
     created:function(){
-        axios.get('http://10.206.12.148:8000/cellinfo/')
+        axios.get('http://127.0.0.1:8000/cellinfo/')
         .then(response=>{
             this.info=response.data.idOptions;
             this.idOptions=response.data.ID;

@@ -51,7 +51,7 @@ export default {
     },
     methods:{
         search(){
-            axios.post('http://10.206.12.148:8000/c2iinfo/',{
+            axios.post('http://127.0.0.1:8000/c2iinfo/',{
                 key:this.x
             })
             .then(response=>{

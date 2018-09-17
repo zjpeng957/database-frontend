@@ -12,7 +12,6 @@
             </el-select>
         </div>
         <el-button @click="ExportData">导出</el-button>
-        <p>{{info}}</p>
         <el-dialog
             title="另存为"
             :visible.sync="dialogVisible"
@@ -56,7 +55,7 @@ export default {
     },
     methods:{
         ExportData(){
-            axios.post('http://10.206.12.148:8000/download/',{
+            axios.post('http://127.0.0.1:8000/download/',{
                 table:this.value,
             })
             .then(response=>{

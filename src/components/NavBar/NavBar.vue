@@ -13,7 +13,7 @@
             <el-menu-item index="2-1">导入</el-menu-item>
             <el-menu-item index="2-2">导出</el-menu-item>
           </el-submenu>
-          <el-menu-item index="3"  v-on:select="$emit('select-item',3)">数据统计</el-menu-item>
+          <el-menu-item index="3">三元组分析</el-menu-item>
         </el-menu>
     </div>
 </template>

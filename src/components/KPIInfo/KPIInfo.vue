@@ -63,7 +63,7 @@ export default {
     },
     methods:{
         search:function(){
-            axios.post('http://10.206.12.148:8000/kpiinfo/',{
+            axios.post('http://127.0.0.1:8000/kpiinfo/',{
                 name:this.name,
                 attr:this.attr,
                 beginTime:this.beginTime,
@@ -104,7 +104,7 @@ export default {
     },
     created:function(){
         
-        axios.get('http://10.206.12.148:8000/kpiinfo/')
+        axios.get('http://127.0.0.1:8000/kpiinfo/')
         .then(response=>{
             this.netUnitList=response.data.netUnitList;
         })
